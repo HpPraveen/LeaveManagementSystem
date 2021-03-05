@@ -23,7 +23,7 @@ namespace LeaveManagementSystem.Services
 
         public string GetLeavePackageByEmployee(string employeeCode)
         {
-            return _unitOfWork.EmployeeMasterRepository.Get(e => e.EmployeeCode == employeeCode).FirstOrDefault().EmployeeLeavePacakge;
+            return _unitOfWork.EmployeeMasterRepository.Get(e => e.EmployeeCode == employeeCode).FirstOrDefault().EmployeeLeavePacakge.ToString();
         }
 
         public string GetSupervisorByEmployee(string employeeCode)

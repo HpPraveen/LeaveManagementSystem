@@ -24,8 +24,8 @@ namespace LeaveManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "EmployeeId,EmployeeCode,EmployeeName,EmployeeSupervisorCode,EmployeeLeavePacakge")] EmployeeMaster employeeMaster)
         {
-            if (employeeMaster.EmployeeCode != null && employeeMaster.EmployeeLeavePacakge != null && employeeMaster.EmployeeName != null && employeeMaster.EmployeeSupervisorCode != null &&
-                employeeMaster.EmployeeCode != "" && employeeMaster.EmployeeLeavePacakge != "" && employeeMaster.EmployeeName != "" && employeeMaster.EmployeeSupervisorCode != "")
+            if (employeeMaster.EmployeeCode != null && employeeMaster.EmployeeName != null && employeeMaster.EmployeeSupervisorCode != null &&
+                employeeMaster.EmployeeCode != "" && employeeMaster.EmployeeLeavePacakge.ToString() != "" && employeeMaster.EmployeeName != "" && employeeMaster.EmployeeSupervisorCode != "")
             {
                 var existingEmployee = db.EmployeeMaster.ToList().Where(e => e.EmployeeCode == employeeMaster.EmployeeCode).ToList();
 

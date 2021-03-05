@@ -9,7 +9,7 @@ namespace LeaveManagementSystem.Controllers
     public class LeaveStatusController : Controller
     {
         private readonly LeaveStatusService _leaveStatusService = new LeaveStatusService(new UnitOfWork(new ApplicationDbContext()));
-        private string supervisorCode = "s1";
+        private string supervisorCode = "S0001";
 
         public ActionResult Index()
         {

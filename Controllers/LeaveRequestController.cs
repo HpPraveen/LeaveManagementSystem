@@ -16,7 +16,7 @@ namespace LeaveManagementSystem.Controllers
         private readonly LeaveRequestService _leaveRequestService = new LeaveRequestService(new UnitOfWork(new ApplicationDbContext()));
 
         private List<SelectListItem> ddlYears = new List<SelectListItem>();
-        private string employeeCode = "e1";
+        private string employeeCode = "E0001";
 
         public ActionResult Create(int? Year, string LeaveTypeCode)
         {
