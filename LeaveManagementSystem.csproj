@@ -181,6 +181,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\EmployeeMastersController.cs" />
     <Compile Include="Controllers\LeaveRequestController.cs" />
     <Compile Include="Controllers\LeaveStatusController.cs" />
     <Compile Include="DAL\GenericRepository.cs" />
@@ -252,6 +253,8 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\LeaveStatus\Index.cshtml" />
     <Content Include="Views\LeaveRequest\Create.cshtml" />
+    <Content Include="Views\EmployeeMasters\Create.cshtml" />
+    <Content Include="Views\EmployeeMasters\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

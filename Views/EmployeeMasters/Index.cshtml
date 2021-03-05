@@ -1,0 +1,45 @@
+﻿@model IEnumerable<LeaveManagementSystem.Models.EmployeeMaster>
+
+@{
+    ViewBag.Title = "Index";
+}
+<br>
+<p>
+    @Html.ActionLink("Create New Employee", "Create")
+</p>
+
+<h2>Employee List</h2>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.EmployeeCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmployeeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmployeeSupervisorCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmployeeLeavePacakge)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeSupervisorCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeLeavePacakge)
+            </td>
+        </tr>
+    }
+</table>
