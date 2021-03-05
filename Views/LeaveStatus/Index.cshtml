@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+@{
+
+    IEnumerable<LeaveManagementSystem.Models.LeaveConfirmationViewModel> pendingLeave = ViewData["PendingLeave"] as IEnumerable<LeaveManagementSystem.Models.LeaveConfirmationViewModel>;
+    IEnumerable<LeaveManagementSystem.Models.LeaveConfirmationViewModel> approvedRejectedLeave = ViewData["ApprovedRejectedLeave"] as IEnumerable<LeaveManagementSystem.Models.LeaveConfirmationViewModel>;
+}
+
+<body>
+    <h2><strong>Leave Confirmations</strong></h2>
+    <br>
+
+    <h4>Pending Leave</h4>
+    <table class="table" border="1">
+        <tr>
+            <th>
+                Emp Name
+            </th>
+            <th>
+                Emp Comment
+            </th>
+            <th>
+                Leave Type
+            </th>
+            <th>
+                Requested Date
+            </th>
+            <th>
+                No: Of Leave
+            </th>
+        </tr>
+
+        @foreach (LeaveManagementSystem.Models.LeaveConfirmationViewModel item in pendingLeave)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeComment)
+                </td>
+                <td align="center">
+                    @Html.DisplayFor(modelItem => item.LeaveType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeaveRequestedFromDate)
+                </td>
+                <td align="right">
+                    @Html.DisplayFor(modelItem => item.NumberOfLeaves)
+                </td>
+                <td align="center">
+                    @using (Html.BeginForm("LeaveConfirmation", "LeaveStatus", new { employeeCode = item.EmployeeCode, leaveTypeCode = item.LeaveTypeCode, leaveRequestedFromDate = item.LeaveRequestedFromDate, noOfLeave = item.NumberOfLeaves }))
+
+                    {
+                        <input placeholder="Add Comment" type="text" name="approverComment" />
+                        <input type="submit" class="btn btn-success" value="Approved" name="status" />
+                        <input type="submit" class="btn btn-danger" value="Rejected" name="status" />
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+
+    <hr />
+    <h4>Approved & Rejected Leave</h4>
+    <table class="table" border="1">
+        <tr>
+            <th>
+                Emp Name
+            </th>
+            <th>
+                Leave Type
+            </th>
+            <th>
+                Requested Date
+            </th>
+            <th>
+                No: Of Leave
+            </th>
+            <th>
+                Your Comment
+            </th>
+            <th> Leave Status</th>
+        </tr>
+
+        @foreach (LeaveManagementSystem.Models.LeaveConfirmationViewModel item in approvedRejectedLeave)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeName)
+                </td>
+                <td align="center">
+                    @Html.DisplayFor(modelItem => item.LeaveType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeaveRequestedFromDate)
+                </td>
+                <td align="right">
+                    @Html.DisplayFor(modelItem => item.NumberOfLeaves)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApproverComment)
+                </td>
+                <td align="center">
+                    @Html.DisplayFor(modelItem => item.LeaveStatus)
+                </td>
+            </tr>
+        }
+    </table>
+    <br>
+</body>
+@if (TempData["ErrorMessage"] != null)
+{
+    <span style="color:Red;">  @TempData["ErrorMessage"] </span>
+}@if (TempData["SuccessMessage"] != null)
+{
+    <span style="color:green;">  @TempData["SuccessMessage"] </span>
+}

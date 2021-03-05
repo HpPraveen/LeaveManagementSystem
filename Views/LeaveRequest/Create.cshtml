@@ -1,0 +1,188 @@
+﻿@model LeaveManagementSystem.Models.LeaveEntry
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@{
+    IEnumerable<LeaveManagementSystem.Models.LeaveConfirmationViewModel> leaveHistory = ViewData["LeaveHistory"] as IEnumerable<LeaveManagementSystem.Models.LeaveConfirmationViewModel>;
+}
+
+<h2>Leave Request</h2>
+
+@using (Html.BeginForm("LeaveApply", "LeaveRequest"))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row" style="border:solid; border-width:thin; ">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <div class="col-lg-12 text-center">
+                <div class="row">
+                    <div class="col-lg-6" align="left">
+                        Year
+                        @Html.DropDownList("linktoYearId", null, "--Select--", new
+                        {
+                            @id = "ddlYears",
+                            @name = "leaveType",
+                            @onChange = "return ChangeYear(this)",
+                            @class = "form-control",
+                            @style = "width:200px"
+                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                Leave Package :  @ViewData["LeavePackage"]
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                Leave Type
+                @Html.DropDownList("leaveType", new SelectList((System.Collections.IEnumerable)ViewData["LeaveTypes"], "LeaveTypeCode", "LeaveTypeDescription"), new { Class = "ddlStyle", id = "ddlLeaveType", onChange = "return ChangeLeaveType(this)" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                Remaining Leave :
+                <asp:Label ID="remainingLeaveViewBag" runat="server">@ViewBag.RemainingLeave</asp:Label>
+                <asp:Label ID="remainingLeave" runat="server"></asp:Label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                Requested Date
+                <input id="requestedDate" type="date" name="requestedDate" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                No of Days
+                <input type="number" name="leaveDays" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                Approving Officer :  @ViewData["Supervisor"]
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                Reason :
+                <input type="text" name="reason" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Apply" class="btn btn-info" />
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <div>
+        <h4>Leave History</h4>
+        <table class="table" border="1">
+            <tr>
+                <th>
+                    Year
+                </th>
+                <th>
+                    Leave Type
+                </th>
+                <th>
+                    Reason
+                </th>
+                <th>
+                    Requested Date
+                </th>
+                <th>
+                    No: Of Leave
+                </th>
+                <th>
+                    Supervisor Comment
+                </th>
+                <th>
+                    Status
+                </th>
+            </tr>
+
+            @foreach (LeaveManagementSystem.Models.LeaveConfirmationViewModel item in leaveHistory)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Year)
+                    </td>
+                    <td align="center">
+                        @Html.DisplayFor(modelItem => item.LeaveType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmployeeComment)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LeaveRequestedFromDate)
+                    </td>
+                    <td align="right">
+                        @Html.DisplayFor(modelItem => item.NumberOfLeaves)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApproverComment)
+                    </td>
+                    <td align="center">
+                        @Html.DisplayFor(modelItem => item.LeaveStatus)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <span style="color:Red;">  @TempData["ErrorMessage"] </span>
+}@if (TempData["SuccessMessage"] != null)
+{
+    <span style="color:green;">  @TempData["SuccessMessage"] </span>
+}
+
+
+<script type="text/javascript">
+
+    function ChangeYear(obj) {
+        $("#requestedDate").datepicker();
+        myDate = new Date();
+        myDate.setDate(myDate.getDate() - 30);
+        $('#requestedDate').datepicker('setDate', myDate);
+        window.location.href = '@Url.Action("Create", "LeaveRequest")?Year=' + obj.value;
+    }
+
+    function ChangeLeaveType(obj) {
+
+        $("#remainingLeaveViewBag").hide();
+        var year = $("#ddlYears").val();
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetLeaveTypeCode", "LeaveRequest")',
+            contentType: "application/json; charset=utf-8",
+            data: {year: year, leaveTypeCode: obj.value},
+            dataType: "json",
+            success: function (data)
+            {
+                $('#remainingLeave').text(data);
+            },
+            error: function() { alert('Error !!!'); }
+        });
+
+    }
+</script>
