@@ -28,7 +28,7 @@ namespace LeaveManagementSystem.Controllers
             }
             if (leaveTypeCode == null)
             {
-                leaveTypeCode = "A001";
+                leaveTypeCode = "A0001";
             }
 
             ViewData["LeaveHistory"] = _leaveRequestService.GetAllLeaveByEmployee(employeeCode, year);
@@ -67,27 +67,35 @@ namespace LeaveManagementSystem.Controllers
         {
             if (leaveType != null && requestedDate != null && leaveDays != null && reason != null && leaveType != "" && requestedDate != "" && leaveDays > 0 && reason != "")
             {
-                var supervisorCode = _leaveRequestService.GetSupervisorByEmployee(employeeCode);
-                var leaveEntry = new LeaveEntry
+                var remainingLeave = _leaveRequestService.GetRemainingLeaveAmountByEmployee(employeeCode, Convert.ToDateTime(requestedDate).Year, leaveType);
+                if (remainingLeave == 0)
                 {
-                    EmployeeCode = employeeCode,
-                    LeaveTypeCode = leaveType,
-                    LeaveRequestedFromDate = Convert.ToDateTime(requestedDate),
-                    LeaveRequestedToDate = Convert.ToDateTime(requestedDate),
-                    LeaveStatus = "Requested",
-                    NumberOfLeaves = (int)leaveDays,
-                    EmployeeComment = reason,
-                    EmployeesSupervisorCode = supervisorCode
-                };
-                var result = _leaveRequestService.AddEmployeeLeaveEntry(leaveEntry);
-
-                if (result == true)
-                {
-                    TempData["SuccessMessage"] = "Leave Request send to the supervisor!";
+                    TempData["ErrorMessage"] = "You haven't enough leave!";
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Leave Request Error !";
+                    var supervisorCode = _leaveRequestService.GetSupervisorByEmployee(employeeCode);
+                    var leaveEntry = new LeaveEntry
+                    {
+                        EmployeeCode = employeeCode,
+                        LeaveTypeCode = leaveType,
+                        LeaveRequestedFromDate = Convert.ToDateTime(requestedDate),
+                        LeaveRequestedToDate = Convert.ToDateTime(requestedDate),
+                        LeaveStatus = "Requested",
+                        NumberOfLeaves = (int)leaveDays,
+                        EmployeeComment = reason,
+                        EmployeesSupervisorCode = supervisorCode
+                    };
+                    var result = _leaveRequestService.AddEmployeeLeaveEntry(leaveEntry);
+
+                    if (result == true)
+                    {
+                        TempData["SuccessMessage"] = "Leave Request send to the supervisor!";
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Leave Request Error !";
+                    }
                 }
             }
             else

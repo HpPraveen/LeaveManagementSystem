@@ -9,87 +9,78 @@
 }
 
 <h2>Leave Request</h2>
-
+<hr>
 @using (Html.BeginForm("LeaveApply", "LeaveRequest"))
 {
     @Html.AntiForgeryToken()
 
-    <div class="row" style="border:solid; border-width:thin; ">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="row">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            <div class="col-lg-12 text-center">
-                <div class="row">
-                    <div class="col-lg-6" align="left">
-                        Year
-                        @Html.DropDownList("linktoYearId", null, "--Select--", new
-                        {
-                            @id = "ddlYears",
-                            @name = "leaveType",
-                            @onChange = "return ChangeYear(this)",
-                            @class = "form-control",
-                            @style = "width:200px"
-                        })
-                    </div>
-                </div>
+    <div class="col-md-12">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Year :</label>
+                @Html.DropDownList("linktoYearId", null, "--Select--", new
+                {
+                    @id = "ddlYears",
+                    @name = "leaveType",
+                    @onChange = "return ChangeYear(this)",
+                    @class = "form-control",
+                    @style = "width:200px"
+                })
             </div>
         </div>
-
-        <div class="form-group">
-            <div class="col-md-10">
-                Leave Package :  @ViewData["LeavePackage"]
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-10">
-                Leave Type
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label> Leave Type :</label><br>
                 @Html.DropDownList("leaveType", new SelectList((System.Collections.IEnumerable)ViewData["LeaveTypes"], "LeaveTypeCode", "LeaveTypeDescription"), new { Class = "ddlStyle", id = "ddlLeaveType", onChange = "return ChangeLeaveType(this)" })
             </div>
         </div>
-
-        <div class="form-group">
-            <div class="col-md-10">
-                Remaining Leave :
-                <asp:Label ID="remainingLeaveViewBag" runat="server">@ViewBag.RemainingLeave</asp:Label>
-                <asp:Label ID="remainingLeave" runat="server"></asp:Label>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-10">
-                Requested Date
+        <div class="col-md-3">
+            <div class="form-group">
+                <label> Requested Date :</label><br>
                 <input id="requestedDate" type="date" name="requestedDate" />
             </div>
         </div>
-
-        <div class="form-group">
-            <div class="col-md-10">
-                No of Days
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>No of Days :</label><br>
                 <input type="number" name="leaveDays" />
             </div>
         </div>
-
-        <div class="form-group">
-            <div class="col-md-10">
-                Approving Officer :  @ViewData["Supervisor"]
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-10">
-                Reason :
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Reason :</label><br>
                 <input type="text" name="reason" />
             </div>
         </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Remaining Leave : </label>
+                <asp:Label ID="remainingLeaveViewBag" runat="server">@ViewBag.RemainingLeave</asp:Label>
+                <asp:Label ID="remainingLeave" runat="server"></asp:Label>
+            </div>
+            <div class="form-group">
+                <label>Leave Package :</label>  @ViewData["LeavePackage"]
+            </div>
+            <div class="form-group">
+                <label>Approving Officer :</label>  @ViewData["Supervisor"]
+            </div>
+        </div>
+        <div class="col-md-12">
+                <div class="form-group">
+                    <input type="submit" value="Apply" class="btn btn-warning" />
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Apply" class="btn btn-warning" />
             </div>
         </div>
     </div>
 
+    </div>
     <hr />
     <div>
         <h4>Leave History</h4>
@@ -146,22 +137,19 @@
             }
         </table>
     </div>
-}
-@if (TempData["ErrorMessage"] != null)
-{
-    <span style="color:Red;">  @TempData["ErrorMessage"] </span>
-}@if (TempData["SuccessMessage"] != null)
-{
-    <span style="color:green;">  @TempData["SuccessMessage"] </span>
-}
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <span style="color:Red;">  @TempData["ErrorMessage"] </span>
+    }@if (TempData["SuccessMessage"] != null)
+    {
+        <span style="color:green;">  @TempData["SuccessMessage"] </span>
+    }
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
     function ChangeYear(obj) {
-        $("#requestedDate").datepicker();
-        myDate = new Date();
-        myDate.setDate(myDate.getDate() - 30);
-        $('#requestedDate').datepicker('setDate', myDate);
+
         window.location.href = '@Url.Action("Create", "LeaveRequest")?Year=' + obj.value;
     }
 
@@ -184,4 +172,4 @@
         });
 
     }
-</script>
+    </script>

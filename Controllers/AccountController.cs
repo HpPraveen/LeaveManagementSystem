@@ -77,6 +77,37 @@ namespace LeaveManagementSystem.Controllers
                 _context.SaveChanges();
             }
 
+            if (!_context.LeaveTypes.Any(x => x.LeaveTypeCode == "A0001"))
+            {
+                var annualLeaveType = new LeaveTypes
+                {
+                    LeaveTypeCode = "A0001",
+                    LeaveTypeDescription = "Annual"
+                };
+                _context.LeaveTypes.Add(annualLeaveType);
+                _context.SaveChanges();
+            }
+            if (!_context.LeaveTypes.Any(x => x.LeaveTypeCode == "C0001"))
+            {
+                var casualLeaveType = new LeaveTypes
+                {
+                    LeaveTypeCode = "C0001",
+                    LeaveTypeDescription = "Casual"
+                };
+                _context.LeaveTypes.Add(casualLeaveType);
+                _context.SaveChanges();
+            }
+            if (!_context.LeaveTypes.Any(x => x.LeaveTypeCode == "S0001"))
+            {
+                var sickLeaveType = new LeaveTypes
+                {
+                    LeaveTypeCode = "S0001",
+                    LeaveTypeDescription = "Sick"
+                };
+                _context.LeaveTypes.Add(sickLeaveType);
+                _context.SaveChanges();
+            }
+
             var registerViewModel = new RegisterViewModel
             {
                 Email = "admin@empite.com",
