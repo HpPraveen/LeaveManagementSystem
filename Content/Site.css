@@ -9,8 +9,8 @@
     padding-right: 15px;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
+/* Override the default bootstrap behavior where horizontal description lists
+   will truncate terms that are too long to fit in the left column
 */
 .dl-horizontal dt {
     white-space: normal;
@@ -21,4 +21,29 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+#pendingLeave th {
+    color: white;
+    background: #716492;
+}
+#pendingLeave tr {
+    color: white;
+    background: #969696d0;
+}
+#approveRejectleave th {
+    color: white;
+    background: #309e8f;
+}
+#approveRejectleave tr {
+    color: whitesmoke;
+    background: #86ab9d;
+}
+#leaveHistory th {
+    color: white;
+    background: #072a6b;
+}
+#leaveHistory tr {
+    color: white;
+    background: #5b95b1ba;
 }
