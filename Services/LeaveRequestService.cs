@@ -10,6 +10,7 @@ namespace LeaveManagementSystem.Services
     public class LeaveRequestService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly LeaveStatusService _leaveStatusService = new LeaveStatusService(new UnitOfWork(new ApplicationDbContext()));
 
         public LeaveRequestService(IUnitOfWork unitOfWork)
         {
@@ -74,6 +75,21 @@ namespace LeaveManagementSystem.Services
         {
             try
             {
+                var LeaveConfirmationViewModel = new LeaveConfirmationViewModel
+                {
+                    EmployeeCode = leaveEntry.EmployeeCode,
+                    LeaveTypeCode = leaveEntry.LeaveTypeCode,
+                    LeaveRequestedFromDate = leaveEntry.LeaveRequestedFromDate.ToString(),
+                    LeaveStatus = leaveEntry.LeaveStatus,
+                    NumberOfLeaves = leaveEntry.NumberOfLeaves
+                };
+                var result = _leaveStatusService.UpdateEmployeeLeaveAllocation(LeaveConfirmationViewModel);
+
+                if (result == false)
+                {
+                    return false;
+                }
+
                 _unitOfWork.LeaveEntryRepository.Insert(leaveEntry);
                 _unitOfWork.SaveAsync();
                 return true;

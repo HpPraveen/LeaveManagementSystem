@@ -87,7 +87,7 @@ namespace LeaveManagementSystem.Services
                     employeeLeaveEntry.FirstOrDefault().LeaveStatusUpdatedDate = leaveConfirmationViewModel.LeaveStatusUpdatedDate;
                     employeeLeaveEntry.FirstOrDefault().ApproverComment = leaveConfirmationViewModel.ApproverComment;
 
-                    if (leaveConfirmationViewModel.LeaveStatus == "Approved")
+                    if (leaveConfirmationViewModel.LeaveStatus == "Rejected")
                     {
                         var result = UpdateEmployeeLeaveAllocation(leaveConfirmationViewModel);
 
@@ -122,8 +122,16 @@ namespace LeaveManagementSystem.Services
 
                 if (employeeLeaveAllocation.Count > 0)
                 {
-                    employeeLeaveAllocation.FirstOrDefault().UtilizedLeaveAmount += leaveConfirmationViewModel.NumberOfLeaves;
-                    employeeLeaveAllocation.FirstOrDefault().RemainingLeaveAmount = employeeLeaveAllocation.FirstOrDefault().EntitledLeaveAmount - employeeLeaveAllocation.FirstOrDefault().UtilizedLeaveAmount;
+                    if (leaveConfirmationViewModel.LeaveStatus == "Rejected")
+                    {
+                        employeeLeaveAllocation.FirstOrDefault().UtilizedLeaveAmount -= leaveConfirmationViewModel.NumberOfLeaves;
+                        employeeLeaveAllocation.FirstOrDefault().RemainingLeaveAmount = employeeLeaveAllocation.FirstOrDefault().EntitledLeaveAmount - employeeLeaveAllocation.FirstOrDefault().UtilizedLeaveAmount;
+                    }
+                    else if (leaveConfirmationViewModel.LeaveStatus == "Requested")
+                    {
+                        employeeLeaveAllocation.FirstOrDefault().UtilizedLeaveAmount += leaveConfirmationViewModel.NumberOfLeaves;
+                        employeeLeaveAllocation.FirstOrDefault().RemainingLeaveAmount = employeeLeaveAllocation.FirstOrDefault().EntitledLeaveAmount - employeeLeaveAllocation.FirstOrDefault().UtilizedLeaveAmount;
+                    }
                     _unitOfWork.LeaveAllocationRepository.Update(employeeLeaveAllocation.FirstOrDefault());
                     _unitOfWork.SaveAsync();
                     return true;
