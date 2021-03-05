@@ -36,3 +36,11 @@
         </div>
     </div>
 }
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <span style="color:Red;">  @TempData["ErrorMessage"] </span>
+}@if (TempData["SuccessMessage"] != null)
+{
+    <span style="color:green;">  @TempData["SuccessMessage"] </span>
+}

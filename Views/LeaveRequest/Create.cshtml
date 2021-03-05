@@ -8,7 +8,7 @@
     IEnumerable<LeaveManagementSystem.Models.LeaveConfirmationViewModel> leaveHistory = ViewData["LeaveHistory"] as IEnumerable<LeaveManagementSystem.Models.LeaveConfirmationViewModel>;
 }
 
-<h2>Leave Request</h2>
+<h2>Leave Request By  @TempData["LoggedEmployee"]</h2>
 <hr>
 @using (Html.BeginForm("LeaveApply", "LeaveRequest"))
 {
@@ -70,6 +70,10 @@
                 </div>
                 <div class="form-group">
                     <label>Approving Officer :</label>  @ViewData["Supervisor"]
+                </div>
+                <div class="form-group">
+                    <label>Employee Code :</label>
+                    <input type="text" id="empCode" value=" @TempData["LoggedEmployee"]" name="employeeCode" re />
                 </div>
             </div>
             <div class="col-md-12">
@@ -154,12 +158,13 @@
 
         $("#remainingLeaveViewBag").hide();
         var year = $("#ddlYears").val();
+        var empCode = $("#empCode").val();
 
         $.ajax({
             type: "GET",
             url: '@Url.Action("GetLeaveTypeCode", "LeaveRequest")',
             contentType: "application/json; charset=utf-8",
-            data: {year: year, leaveTypeCode: obj.value},
+            data: { year: year, leaveTypeCode: obj.value, employeeCode: empCode},
             dataType: "json",
             success: function (data)
             {
