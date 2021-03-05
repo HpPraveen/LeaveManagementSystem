@@ -1,4 +1,5 @@
 ﻿using LeaveManagementSystem.Models;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -35,6 +36,84 @@ namespace LeaveManagementSystem.Controllers
                     {
                         db.EmployeeMaster.Add(employeeMaster);
                         db.SaveChanges();
+
+                        if (employeeMaster.EmployeeLeavePacakge.ToString() == "Office")
+                        {
+                            var annualLeaveForOffice = new LeaveAllocation
+                            {
+                                EmployeeCode = employeeMaster.EmployeeCode,
+                                LeaveTypeCode = "A0001",
+                                Year = DateTime.Now.Year.ToString(),
+                                EntitledLeaveAmount = 14,
+                                UtilizedLeaveAmount = 0,
+                                RemainingLeaveAmount = 14
+                            };
+                            db.LeaveAllocation.Add(annualLeaveForOffice);
+                            db.SaveChanges();
+
+                            var casualLeaveForOffice = new LeaveAllocation
+                            {
+                                EmployeeCode = employeeMaster.EmployeeCode,
+                                LeaveTypeCode = "C0001",
+                                Year = DateTime.Now.Year.ToString(),
+                                EntitledLeaveAmount = 7,
+                                UtilizedLeaveAmount = 0,
+                                RemainingLeaveAmount = 7
+                            };
+                            db.LeaveAllocation.Add(casualLeaveForOffice);
+                            db.SaveChanges();
+
+                            var sickLeaveForOffice = new LeaveAllocation
+                            {
+                                EmployeeCode = employeeMaster.EmployeeCode,
+                                LeaveTypeCode = "S0001",
+                                Year = DateTime.Now.Year.ToString(),
+                                EntitledLeaveAmount = 21,
+                                UtilizedLeaveAmount = 0,
+                                RemainingLeaveAmount = 21
+                            };
+                            db.LeaveAllocation.Add(sickLeaveForOffice);
+                            db.SaveChanges();
+                        }
+                        else if (employeeMaster.EmployeeLeavePacakge.ToString() == "Wages")
+                        {
+                            var annualLeaveForWages = new LeaveAllocation
+                            {
+                                EmployeeCode = employeeMaster.EmployeeCode,
+                                LeaveTypeCode = "A0001",
+                                Year = DateTime.Now.Year.ToString(),
+                                EntitledLeaveAmount = 10,
+                                UtilizedLeaveAmount = 0,
+                                RemainingLeaveAmount = 10
+                            };
+                            db.LeaveAllocation.Add(annualLeaveForWages);
+                            db.SaveChanges();
+
+                            var casualLeaveForWages = new LeaveAllocation
+                            {
+                                EmployeeCode = employeeMaster.EmployeeCode,
+                                LeaveTypeCode = "C0001",
+                                Year = DateTime.Now.Year.ToString(),
+                                EntitledLeaveAmount = 10,
+                                UtilizedLeaveAmount = 0,
+                                RemainingLeaveAmount = 10
+                            };
+                            db.LeaveAllocation.Add(casualLeaveForWages);
+                            db.SaveChanges();
+
+                            var sickLeaveForWages = new LeaveAllocation
+                            {
+                                EmployeeCode = employeeMaster.EmployeeCode,
+                                LeaveTypeCode = "S0001",
+                                Year = DateTime.Now.Year.ToString(),
+                                EntitledLeaveAmount = 10,
+                                UtilizedLeaveAmount = 0,
+                                RemainingLeaveAmount = 10
+                            };
+                            db.LeaveAllocation.Add(sickLeaveForWages);
+                            db.SaveChanges();
+                        }
+
                         return RedirectToAction("Index");
                     }
                     return View(employeeMaster);
