@@ -114,6 +114,24 @@ namespace LeaveManagementSystem.Controllers
                             db.SaveChanges();
                         }
 
+                        var newUser = new User
+                        {
+                            Username = employeeMaster.EmployeeCode,
+                            Password = employeeMaster.EmployeeCode
+                        };
+                        db.User.Add(newUser);
+                        db.SaveChanges();
+
+                        var userId = db.User.ToList().Where(e => e.Username == employeeMaster.EmployeeCode).FirstOrDefault().UserId;
+
+                        var newUserRole = new UserRole
+                        {
+                            UserId = userId,
+                            Role = "Employee"
+                        };
+                        db.UserRole.Add(newUserRole);
+                        db.SaveChanges();
+
                         return RedirectToAction("Index");
                     }
                     return View(employeeMaster);

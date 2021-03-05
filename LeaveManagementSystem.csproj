@@ -184,6 +184,7 @@
     <Compile Include="Controllers\EmployeeMastersController.cs" />
     <Compile Include="Controllers\LeaveRequestController.cs" />
     <Compile Include="Controllers\LeaveStatusController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DAL\GenericRepository.cs" />
     <Compile Include="DAL\IGenericRepository.cs" />
     <Compile Include="DAL\IUnitOfWork.cs" />
@@ -199,6 +200,8 @@
     <Compile Include="Models\LeaveConfirmationViewModel.cs" />
     <Compile Include="Models\LeaveEntry.cs" />
     <Compile Include="Models\LeaveTypes.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\LeaveRequestService.cs" />
     <Compile Include="Services\LeaveStatusService.cs" />
@@ -255,6 +258,7 @@
     <Content Include="Views\LeaveRequest\Create.cshtml" />
     <Content Include="Views\EmployeeMasters\Create.cshtml" />
     <Content Include="Views\EmployeeMasters\Index.cshtml" />
+    <Content Include="Views\Users\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
