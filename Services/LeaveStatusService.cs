@@ -116,8 +116,9 @@ namespace LeaveManagementSystem.Services
         {
             try
             {
+                var requestedDate = Convert.ToDateTime(leaveConfirmationViewModel.LeaveRequestedFromDate);
                 var employeeLeaveAllocation = _unitOfWork.LeaveAllocationRepository.Get(e => e.EmployeeCode == leaveConfirmationViewModel.EmployeeCode &&
-                e.LeaveTypeCode == leaveConfirmationViewModel.LeaveTypeCode && e.Year == Convert.ToDateTime(leaveConfirmationViewModel.LeaveRequestedFromDate).Year.ToString()).ToList();
+                e.LeaveTypeCode == leaveConfirmationViewModel.LeaveTypeCode && e.Year == requestedDate.Year.ToString()).ToList();
 
                 if (employeeLeaveAllocation.Count > 0)
                 {

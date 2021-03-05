@@ -65,42 +65,35 @@ namespace LeaveManagementSystem.Controllers
 
         public ActionResult LeaveApply(string leaveType, string requestedDate, int? leaveDays, string reason)
         {
-            if (leaveType != null && requestedDate != null && leaveDays != null && reason != null)
+            if (leaveType != null && requestedDate != null && leaveDays != null && reason != null && leaveType != "" && requestedDate != "" && leaveDays > 0 && reason != "")
             {
+                var supervisorCode = _leaveRequestService.GetSupervisorByEmployee(employeeCode);
+                var leaveEntry = new LeaveEntry
+                {
+                    EmployeeCode = employeeCode,
+                    LeaveTypeCode = leaveType,
+                    LeaveRequestedFromDate = Convert.ToDateTime(requestedDate),
+                    LeaveRequestedToDate = Convert.ToDateTime(requestedDate),
+                    LeaveStatus = "Requested",
+                    NumberOfLeaves = (int)leaveDays,
+                    EmployeeComment = reason,
+                    EmployeesSupervisorCode = supervisorCode
+                };
+                var result = _leaveRequestService.AddEmployeeLeaveEntry(leaveEntry);
+
+                if (result == true)
+                {
+                    TempData["SuccessMessage"] = "Leave Request send to the supervisor!";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Leave Request Error !";
+                }
             }
             else
             {
                 TempData["ErrorMessage"] = "Please fill all required fields !";
             }
-            //var leaveConfirmationViewModel = new LeaveConfirmationViewModel
-            //{
-            //    EmployeeCode = employeeCode,
-            //    LeaveTypeCode = leaveTypeCode,
-            //    LeaveRequestedFromDate = leaveRequestedFromDate,
-            //    LeaveStatus = status,
-            //    NumberOfLeaves = noOfLeave,
-            //    ApproverComment = approverComment,
-            //    LeaveStatusUpdatedDate = DateTime.Now.Date.ToString(),
-            //    LeaveStatusUpdatedBy = supervisorCode
-            //};
-
-            //var result = _leaveStatusService.UpdateEmployeeLeaveEntry(leaveConfirmationViewModel);
-
-            //if (result == true)
-            //{
-            //    if (status == "Approved")
-            //    {
-            //        TempData["SuccessMessage"] = "Employee Successfully Approved !";
-            //    }
-            //    else if (status == "Rejected")
-            //    {
-            //        TempData["SuccessMessage"] = "Employee Successfully Rejected !";
-            //    }
-            //}
-            //else
-            //{
-            //    TempData["ErrorMessage"] = "Error !";
-            //}
             return Redirect(this.Request.UrlReferrer.AbsolutePath);
         }
     }

@@ -78,7 +78,7 @@ namespace LeaveManagementSystem.Services
                 _unitOfWork.SaveAsync();
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
