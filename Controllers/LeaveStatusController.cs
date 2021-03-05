@@ -25,7 +25,7 @@ namespace LeaveManagementSystem.Controllers
             {
                 EmployeeCode = employeeCode,
                 LeaveTypeCode = leaveTypeCode,
-                LeaveRequestedFromDate = Convert.ToDateTime(leaveRequestedFromDate).ToString("dd/MM/yyyy"),
+                LeaveRequestedFromDate = leaveRequestedFromDate,
                 LeaveStatus = status,
                 NumberOfLeaves = noOfLeave,
                 ApproverComment = approverComment,

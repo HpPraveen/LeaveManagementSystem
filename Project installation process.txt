@@ -1,0 +1,5 @@
+1) Please follow the link and clone the code
+   1.1) https://github.com/HpPraveen/LeaveManagementSystem
+   1.2) better to use VS-2019
+
+2) run the project

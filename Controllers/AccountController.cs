@@ -61,6 +61,7 @@ namespace LeaveManagementSystem.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            #region
             if (!_context.Roles.Any(x => x.Name == "Supervisor"))
             {
                 _context.Roles.Add(new IdentityRole("Supervisor"));
@@ -108,18 +109,67 @@ namespace LeaveManagementSystem.Controllers
                 _context.SaveChanges();
             }
 
+            if (!_context.EmployeeMaster.Any(x => x.EmployeeCode == "E0001"))
+            {
+                var employeeMaster = new EmployeeMaster
+                {
+                    EmployeeCode = "E0001",
+                    EmployeeName = "Test User",
+                    EmployeeSupervisorCode = "S0001",
+                    EmployeeLeavePacakge = LeavePacakge.Office
+                };
+                _context.EmployeeMaster.Add(employeeMaster);
+                _context.SaveChanges();
+
+                var annualLeaveForOffice = new LeaveAllocation
+                {
+                    EmployeeCode = employeeMaster.EmployeeCode,
+                    LeaveTypeCode = "A0001",
+                    Year = DateTime.Now.Year.ToString(),
+                    EntitledLeaveAmount = 14,
+                    UtilizedLeaveAmount = 0,
+                    RemainingLeaveAmount = 14
+                };
+                _context.LeaveAllocation.Add(annualLeaveForOffice);
+                _context.SaveChanges();
+
+                var casualLeaveForOffice = new LeaveAllocation
+                {
+                    EmployeeCode = employeeMaster.EmployeeCode,
+                    LeaveTypeCode = "C0001",
+                    Year = DateTime.Now.Year.ToString(),
+                    EntitledLeaveAmount = 7,
+                    UtilizedLeaveAmount = 0,
+                    RemainingLeaveAmount = 7
+                };
+                _context.LeaveAllocation.Add(casualLeaveForOffice);
+                _context.SaveChanges();
+
+                var sickLeaveForOffice = new LeaveAllocation
+                {
+                    EmployeeCode = employeeMaster.EmployeeCode,
+                    LeaveTypeCode = "S0001",
+                    Year = DateTime.Now.Year.ToString(),
+                    EntitledLeaveAmount = 21,
+                    UtilizedLeaveAmount = 0,
+                    RemainingLeaveAmount = 21
+                };
+                _context.LeaveAllocation.Add(sickLeaveForOffice);
+                _context.SaveChanges();
+            }
+
             var registerViewModel = new RegisterViewModel
             {
-                Email = "admin@empite.com",
+                Email = "admin@abc.com",
                 Password = "abc@123"
             };
 
             //Register(registerViewModel);
 
-            //if (!_userManager.Users.Any(x => x.Email == "admin@empite.com"))
+            //if (!_userManager.Users.Any(x => x.Email == "admin@abc.com"))
             //{
             //    var adminRoleId = _context.Roles.Where(r => r.Name == "Admin").FirstOrDefault().Id.ToString();
-            //    var user = new IdentityUser { UserName = "admin@empite.com", Email = "admin@empite.com", EmailConfirmed = true };
+            //    var user = new ApplicationUser { UserName = "admin@empite.com", Email = "admin@empite.com", EmailConfirmed = true };
             //    _userManager.CreateAsync(user, "admin@123");
 
             //    var userRole = new IdentityUserRole<string>
@@ -127,9 +177,10 @@ namespace LeaveManagementSystem.Controllers
             //        RoleId = adminRoleId,
             //        UserId = user.Id
             //    };
-            //    _context.UserRoles.AddAsync(userRole);
-            //     _context.SaveChangesAsync();
+            //    //_context.UserRoles.AddAsync(userRole);
+            //    _context.SaveChangesAsync();
             //}
+            #endregion
 
             ViewBag.ReturnUrl = returnUrl;
             return View();
@@ -226,25 +277,23 @@ namespace LeaveManagementSystem.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = UserManager.CreateAsync(user, model.Password);
-                //if (result.Succeeded)
-                //{
-                //    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
-                //    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                //    // Send an email with this link
-                //    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                //    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                //    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                //    return RedirectToAction("Index", "Home");
-                //}
-                //AddErrors(result);
+                    return RedirectToAction("Index", "Home");
+                }
+                AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form

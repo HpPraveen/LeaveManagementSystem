@@ -31,8 +31,8 @@ namespace LeaveManagementSystem.Services
                     LeaveType = leaveType,
                     EmployeeCode = pendingLeave.EmployeeCode,
                     LeaveTypeCode = pendingLeave.LeaveTypeCode,
-                    LeaveRequestedFromDate = pendingLeave.LeaveRequestedFromDate.ToString("dd-MM-yyyy"),
-                    LeaveRequestedToDate = pendingLeave.LeaveRequestedToDate.ToString("dd-MM-yyyy"),
+                    LeaveRequestedFromDate = pendingLeave.LeaveRequestedFromDate.ToString("MM/dd/yyyy"),
+                    LeaveRequestedToDate = pendingLeave.LeaveRequestedToDate.ToString("MM/dd/yyyy"),
                     NumberOfLeaves = pendingLeave.NumberOfLeaves,
                     EmployeeComment = pendingLeave.EmployeeComment
                 };
@@ -57,8 +57,8 @@ namespace LeaveManagementSystem.Services
                     LeaveType = leaveType,
                     EmployeeCode = approvedRejectedLeave.EmployeeCode,
                     LeaveTypeCode = approvedRejectedLeave.LeaveTypeCode,
-                    LeaveRequestedFromDate = approvedRejectedLeave.LeaveRequestedFromDate.ToString("dd-MM-yyyy"),
-                    LeaveRequestedToDate = approvedRejectedLeave.LeaveRequestedToDate.ToString("dd-MM-yyyy"),
+                    LeaveRequestedFromDate = approvedRejectedLeave.LeaveRequestedFromDate.ToString("MM/dd/yyyy"),
+                    LeaveRequestedToDate = approvedRejectedLeave.LeaveRequestedToDate.ToString("MM/dd/yyyy"),
                     NumberOfLeaves = approvedRejectedLeave.NumberOfLeaves,
                     EmployeeComment = approvedRejectedLeave.EmployeeComment,
                     LeaveStatusUpdatedDate = approvedRejectedLeave.LeaveStatusUpdatedDate,
