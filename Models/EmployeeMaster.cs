@@ -19,12 +19,20 @@ namespace LeaveManagementSystem.Models
         [DisplayName("Employee Name")]
         public string EmployeeName { get; set; }
 
-        [DisplayName("Supervisor Code")]
-        [RegularExpression("(^S[0-9]{4})", ErrorMessage = "Invalid Supervisor Code. (Start with capital S and use 4 digits. example supervisor code = S000)")]
+        [DisplayName("Supervisor")]
         public string EmployeeSupervisorCode { get; set; }
 
         [DisplayName("Leave Package")]
         public LeavePacakge EmployeeLeavePacakge { get; set; }
+
+        [DisplayName("Employee Type")]
+        public EmployeeType EmployeeType { get; set; }
+    }
+
+    public enum EmployeeType
+    {
+        Normal,
+        Supervisor
     }
 
     public enum LeavePacakge

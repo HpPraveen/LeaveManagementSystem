@@ -18,23 +18,40 @@ namespace LeaveManagementSystem.Controllers
 
         public ActionResult Create()
         {
+            ViewData["EmployeeType"] = Enum.GetValues(typeof(EmployeeType));
+            ViewData["Supervisor"] = db.EmployeeMaster.ToList().Where(e => e.EmployeeType == EmployeeType.Supervisor);
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EmployeeId,EmployeeCode,EmployeeName,EmployeeSupervisorCode,EmployeeLeavePacakge")] EmployeeMaster employeeMaster)
+        public ActionResult Create([Bind(Include = "EmployeeId,EmployeeCode,EmployeeName,EmployeeSupervisorCode,EmployeeLeavePacakge")] EmployeeMaster employeeMaster, string employeeType, string supervisorCode)
         {
-            if (employeeMaster.EmployeeCode != null && employeeMaster.EmployeeName != null && employeeMaster.EmployeeSupervisorCode != null &&
-                employeeMaster.EmployeeCode != "" && employeeMaster.EmployeeLeavePacakge.ToString() != "" && employeeMaster.EmployeeName != "" && employeeMaster.EmployeeSupervisorCode != "")
+            var supervisor_Code = supervisorCode;
+            if (supervisor_Code == null || supervisor_Code == "")
             {
-                var existingEmployee = db.EmployeeMaster.ToList().Where(e => e.EmployeeCode == employeeMaster.EmployeeCode).ToList();
+                supervisor_Code = employeeMaster.EmployeeCode;
+            }
+
+            if (employeeMaster.EmployeeCode != null && employeeMaster.EmployeeName != null && supervisor_Code != null &&
+                employeeMaster.EmployeeCode != "" && employeeMaster.EmployeeLeavePacakge.ToString() != "" && employeeMaster.EmployeeName != "" && supervisor_Code != "")
+            {
+                var existingEmployee = db.EmployeeMaster.ToList().Where(e => e.EmployeeCode == employeeMaster.EmployeeCode || e.EmployeeName == employeeMaster.EmployeeName).ToList();
 
                 if (existingEmployee.Count == 0)
                 {
                     if (ModelState.IsValid)
                     {
-                        db.EmployeeMaster.Add(employeeMaster);
+                        EmployeeType empType = (EmployeeType)Enum.Parse(typeof(EmployeeType), employeeType);
+                        var empMaster = new EmployeeMaster
+                        {
+                            EmployeeCode = employeeMaster.EmployeeCode,
+                            EmployeeName = employeeMaster.EmployeeName,
+                            EmployeeLeavePacakge = employeeMaster.EmployeeLeavePacakge,
+                            EmployeeType = empType,
+                            EmployeeSupervisorCode = supervisor_Code
+                        };
+                        db.EmployeeMaster.Add(empMaster);
                         db.SaveChanges();
 
                         if (employeeMaster.EmployeeLeavePacakge.ToString() == "Office")
@@ -124,16 +141,30 @@ namespace LeaveManagementSystem.Controllers
 
                         var userId = db.User.ToList().Where(e => e.Username == employeeMaster.EmployeeCode).FirstOrDefault().UserId;
 
-                        var newUserRole = new UserRole
+                        if (employeeType == "Normal")
                         {
-                            UserId = userId,
-                            Role = "Employee"
-                        };
-                        db.UserRole.Add(newUserRole);
-                        db.SaveChanges();
-
+                            var newUserRole = new UserRole
+                            {
+                                UserId = userId,
+                                Role = employeeType
+                            };
+                            db.UserRole.Add(newUserRole);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            var newUserRole = new UserRole
+                            {
+                                UserId = userId,
+                                Role = employeeType
+                            };
+                            db.UserRole.Add(newUserRole);
+                            db.SaveChanges();
+                        }
                         return RedirectToAction("Index");
                     }
+                    ViewData["EmployeeType"] = Enum.GetValues(typeof(EmployeeType));
+                    ViewData["Supervisor"] = db.EmployeeMaster.ToList();
                     return View(employeeMaster);
                 }
                 else
@@ -145,6 +176,8 @@ namespace LeaveManagementSystem.Controllers
             {
                 TempData["ErrorMessage"] = "Please fill all the fields !";
             }
+            ViewData["EmployeeType"] = Enum.GetValues(typeof(EmployeeType));
+            ViewData["Supervisor"] = db.EmployeeMaster.ToList();
             return View();
         }
     }

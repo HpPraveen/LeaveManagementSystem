@@ -17,7 +17,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.EmployeeCode, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EmployeeCode, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.EmployeeCode, new { htmlAttributes = new { @class = "form-control", placeholder = "E0000" } })
                 @Html.ValidationMessageFor(model => model.EmployeeCode, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -31,9 +31,17 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.EmployeeSupervisorCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.EmployeeType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EmployeeSupervisorCode, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownList("employeeType", new SelectList((System.Collections.IEnumerable)ViewData["EmployeeType"], "", ""), "--Select Employee Type--", new { Class = "ddlStyle", id = "ddlEmployeeType", onChange = "return ChangeEmployeeType(this)" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmployeeSupervisorCode, htmlAttributes: new { @class = "control-label col-md-2", id = "supervisorLbl" })
+            <div class="col-md-10">
+                @Html.DropDownList("supervisorCode", new SelectList((System.Collections.IEnumerable)ViewData["Supervisor"], "EmployeeCode", "EmployeeName"), "------------------")
                 @Html.ValidationMessageFor(model => model.EmployeeSupervisorCode, "", new { @class = "text-danger" })
                 &nbsp;
             </div>
@@ -44,7 +52,7 @@
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.EmployeeLeavePacakge,
                     new SelectList(Enum.GetValues(typeof(LeaveManagementSystem.Models.LeavePacakge))),
-                    "-------")
+                    "--Select Leave Package--")
                 @Html.ValidationMessageFor(model => model.EmployeeLeavePacakge, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -68,3 +76,15 @@
 {
     <span style="color:green;">  @TempData["SuccessMessage"] </span>
 }
+
+<script type="text/javascript">
+    function ChangeEmployeeType(obj) {
+        if ($("#ddlEmployeeType option:selected").index() == 0 || $("#ddlEmployeeType option:selected").index() == 1) {
+            $("#supervisorCode").show();
+            $("#supervisorLbl").show();
+        } else {
+            $("#supervisorCode").hide();
+            $("#supervisorLbl").hide();
+        }
+    }
+</script>

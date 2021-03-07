@@ -67,8 +67,8 @@ namespace LeaveManagementSystem.Controllers
                 var employeeMaster = new EmployeeMaster
                 {
                     EmployeeCode = "E0001",
-                    EmployeeName = "Test User",
-                    EmployeeSupervisorCode = "S0001",
+                    EmployeeName = "Test Employee",
+                    EmployeeSupervisorCode = "E0001",
                     EmployeeLeavePacakge = LeavePacakge.Office
                 };
                 _context.EmployeeMaster.Add(employeeMaster);
@@ -138,12 +138,12 @@ namespace LeaveManagementSystem.Controllers
             if (username != null && username != "" && password != null && password != "")
             {
                 var userDetails = _context.User.ToList().Where(e => e.Username == username && e.Password == password).ToList();
-                var empName = _context.EmployeeMaster.ToList().Where(e => e.EmployeeCode == username).ToList().FirstOrDefault().EmployeeName;
 
                 if (userDetails.Count > 0)
                 {
                     if (userDetails.FirstOrDefault().UserId != 0)
                     {
+                        var empName = _context.EmployeeMaster.ToList().Where(e => e.EmployeeCode == username).ToList().FirstOrDefault().EmployeeName;
                         var userRole = _context.UserRole.ToList().Where(e => e.UserId == userDetails.FirstOrDefault().UserId).FirstOrDefault().Role;
                         if (userRole == "Employee")
                         {
@@ -155,7 +155,7 @@ namespace LeaveManagementSystem.Controllers
                         {
                             TempData["LoggedSupervisorCode"] = username;
                             TempData["LoggedSupervisorName"] = empName;
-                            return RedirectToAction("Create", "LeaveRequest");
+                            return RedirectToAction("Index", "LeaveStatus");
                         }
                     }
                     else

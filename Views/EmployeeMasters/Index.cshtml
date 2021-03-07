@@ -18,7 +18,10 @@
             @Html.DisplayNameFor(model => model.EmployeeName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EmployeeSupervisorCode)
+            @Html.DisplayNameFor(model => model.EmployeeType)
+        </th>
+        <th>
+            Supervisor Code
         </th>
         <th>
             @Html.DisplayNameFor(model => model.EmployeeLeavePacakge)
@@ -27,19 +30,22 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmployeeCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmployeeName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmployeeSupervisorCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmployeeLeavePacakge)
-            </td>
-        </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.EmployeeCode)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.EmployeeName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.EmployeeType)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.EmployeeSupervisorCode)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.EmployeeLeavePacakge)
+    </td>
+</tr>
     }
 </table>
