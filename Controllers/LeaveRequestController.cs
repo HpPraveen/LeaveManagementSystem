@@ -16,10 +16,14 @@ namespace LeaveManagementSystem.Controllers
         private readonly LeaveRequestService _leaveRequestService = new LeaveRequestService(new UnitOfWork(new ApplicationDbContext()));
 
         private List<SelectListItem> ddlYears = new List<SelectListItem>();
-        private string employeeCode = "E0001";
 
         public ActionResult Create(int? Year, string LeaveTypeCode)
         {
+            string employeeCode = Session["LoggedEmployeeCode"].ToString();
+            if (employeeCode == null)
+            {
+                return RedirectToAction("Create", "Users");
+            }
             int? year = Year;
             string leaveTypeCode = LeaveTypeCode;
             if (year == null)
@@ -58,6 +62,7 @@ namespace LeaveManagementSystem.Controllers
 
         public ActionResult GetLeaveTypeCode(int year, string leaveTypeCode)
         {
+            string employeeCode = Session["LoggedEmployeeCode"].ToString();
             var remainingLeave = _leaveRequestService.GetRemainingLeaveAmountByEmployee(employeeCode, year, leaveTypeCode);
 
             return Json(remainingLeave, JsonRequestBehavior.AllowGet);
@@ -65,6 +70,7 @@ namespace LeaveManagementSystem.Controllers
 
         public ActionResult LeaveApply(string leaveType, string requestedDate, int? leaveDays, string reason)
         {
+            string employeeCode = Session["LoggedEmployeeCode"].ToString();
             if (leaveType != null && requestedDate != null && leaveDays != null && reason != null && leaveType != "" && requestedDate != "" && leaveDays > 0 && reason != "")
             {
                 var remainingLeave = _leaveRequestService.GetRemainingLeaveAmountByEmployee(employeeCode, Convert.ToDateTime(requestedDate).Year, leaveType);
@@ -88,7 +94,7 @@ namespace LeaveManagementSystem.Controllers
                         }
                         else
                         {
-                            var supervisorCode = _leaveRequestService.GetSupervisorByEmployee(employeeCode);
+                            var supervisorCode = _leaveRequestService.GetSupervisorCodeByEmployee(employeeCode);
                             var leaveEntry = new LeaveEntry
                             {
                                 EmployeeCode = employeeCode,

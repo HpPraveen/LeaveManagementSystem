@@ -215,14 +215,14 @@ namespace LeaveManagementSystem.Controllers
                         var userRole = _context.UserRole.ToList().Where(e => e.UserId == userDetails.FirstOrDefault().UserId).FirstOrDefault().Role;
                         if (userRole == "Employee")
                         {
-                            TempData["LoggedEmployeeCode"] = username;
-                            TempData["LoggedEmployee"] = empName;
+                            Session["LoggedEmployeeCode"] = username;
+                            Session["LoggedEmployee"] = empName;
                             return RedirectToAction("Create", "LeaveRequest");
                         }
                         else if (userRole == "Supervisor")
                         {
-                            TempData["LoggedSupervisorCode"] = username;
-                            TempData["LoggedSupervisorName"] = empName;
+                            Session["LoggedSupervisorCode"] = username;
+                            Session["LoggedSupervisorName"] = empName;
                             return RedirectToAction("Index", "LeaveStatus");
                         }
                     }

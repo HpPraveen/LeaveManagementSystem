@@ -8,7 +8,17 @@
     IEnumerable<LeaveManagementSystem.Models.LeaveConfirmationViewModel> leaveHistory = ViewData["LeaveHistory"] as IEnumerable<LeaveManagementSystem.Models.LeaveConfirmationViewModel>;
 }
 
-<h2>Leave Request By  @TempData["LoggedEmployee"]</h2>
+<h2>Leave Request By  @Session["LoggedEmployee"]</h2>
+<div class="form-group">
+    @Html.DropDownList("linktoYearId", null, "--Select--", new
+    {
+        @id = "ddlYears",
+        @name = "leaveType",
+        @onChange = "return ChangeYear(this)",
+        @class = "form-control",
+        @style = "width:200px"
+    })
+</div>
 <hr>
 @using (Html.BeginForm("LeaveApply", "LeaveRequest"))
 {
@@ -17,21 +27,6 @@
     <div class="row">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="col-md-12">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Year :</label>
-                    @Html.DropDownList("linktoYearId", null, "--Select--", new
-                    {
-                        @id = "ddlYears",
-                        @name = "leaveType",
-                        @onChange = "return ChangeYear(this)",
-                        @class = "form-control",
-                        @style = "width:200px"
-                    })
-                </div>
-            </div>
-        </div>
         <div class="col-md-12">
             <div class="col-md-3">
                 <div class="form-group">
@@ -72,7 +67,7 @@
                     <label>Approving Officer :</label>  @ViewData["Supervisor"]
                 </div>
                 <div class="form-group">
-                    <label>Employee Code : </label> @TempData["LoggedEmployeeCode"]
+                    <label>Employee Code : </label> @Session["LoggedEmployeeCode"]
                 </div>
             </div>
             <div class="col-md-12">
@@ -85,6 +80,7 @@
     <hr />
     <div>
         <h4>Leave History</h4>
+
         <table id="leaveHistory" class="table" border="1">
             <tr>
                 <th>

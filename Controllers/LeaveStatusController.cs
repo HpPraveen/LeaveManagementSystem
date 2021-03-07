@@ -9,10 +9,14 @@ namespace LeaveManagementSystem.Controllers
     public class LeaveStatusController : Controller
     {
         private readonly LeaveStatusService _leaveStatusService = new LeaveStatusService(new UnitOfWork(new ApplicationDbContext()));
-        private string supervisorCode = "S0001";
 
         public ActionResult Index()
         {
+            string supervisorCode = Session["LoggedSupervisorCode"].ToString();
+            if (supervisorCode == null)
+            {
+                return RedirectToAction("Create", "Users");
+            }
             ViewData["PendingLeave"] = _leaveStatusService.GetPendingLeaveConfirmationsBySupervisor(supervisorCode);
             ViewData["ApprovedRejectedLeave"] = _leaveStatusService.GetLeaveConfirmationsBySupervisor(supervisorCode);
 
@@ -21,6 +25,7 @@ namespace LeaveManagementSystem.Controllers
 
         public ActionResult LeaveConfirmation(string employeeCode, string leaveRequestedFromDate, string leaveTypeCode, int noOfLeave, string status, string approverComment)
         {
+            string supervisorCode = Session["LoggedSupervisorCode"].ToString();
             var leaveConfirmationViewModel = new LeaveConfirmationViewModel
             {
                 EmployeeCode = employeeCode,
