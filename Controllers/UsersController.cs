@@ -67,9 +67,78 @@ namespace LeaveManagementSystem.Controllers
                 var employeeMaster = new EmployeeMaster
                 {
                     EmployeeCode = "E0001",
+                    EmployeeName = "Test Supervisor",
+                    EmployeeLeavePacakge = LeavePacakge.Wages,
+                    EmployeeType = EmployeeType.Supervisor,
+                    EmployeeSupervisorCode = "E0001"
+                };
+                _context.EmployeeMaster.Add(employeeMaster);
+                _context.SaveChanges();
+
+                var annualLeaveForOffice = new LeaveAllocation
+                {
+                    EmployeeCode = employeeMaster.EmployeeCode,
+                    LeaveTypeCode = "A0001",
+                    Year = DateTime.Now.Year.ToString(),
+                    EntitledLeaveAmount = 10,
+                    UtilizedLeaveAmount = 0,
+                    RemainingLeaveAmount = 10
+                };
+                _context.LeaveAllocation.Add(annualLeaveForOffice);
+                _context.SaveChanges();
+
+                var casualLeaveForOffice = new LeaveAllocation
+                {
+                    EmployeeCode = employeeMaster.EmployeeCode,
+                    LeaveTypeCode = "C0001",
+                    Year = DateTime.Now.Year.ToString(),
+                    EntitledLeaveAmount = 10,
+                    UtilizedLeaveAmount = 0,
+                    RemainingLeaveAmount = 10
+                };
+                _context.LeaveAllocation.Add(casualLeaveForOffice);
+                _context.SaveChanges();
+
+                var sickLeaveForOffice = new LeaveAllocation
+                {
+                    EmployeeCode = employeeMaster.EmployeeCode,
+                    LeaveTypeCode = "S0001",
+                    Year = DateTime.Now.Year.ToString(),
+                    EntitledLeaveAmount = 10,
+                    UtilizedLeaveAmount = 0,
+                    RemainingLeaveAmount = 10
+                };
+                _context.LeaveAllocation.Add(sickLeaveForOffice);
+                _context.SaveChanges();
+
+                var newUser = new User
+                {
+                    Username = employeeMaster.EmployeeCode,
+                    Password = employeeMaster.EmployeeCode
+                };
+                _context.User.Add(newUser);
+                _context.SaveChanges();
+
+                var userId = _context.User.ToList().Where(e => e.Username == employeeMaster.EmployeeCode).FirstOrDefault().UserId;
+
+                var newUserRole = new UserRole
+                {
+                    UserId = userId,
+                    Role = EmployeeType.Supervisor.ToString()
+                };
+                _context.UserRole.Add(newUserRole);
+                _context.SaveChanges();
+            }
+
+            if (!_context.EmployeeMaster.Any(x => x.EmployeeCode == "E0002"))
+            {
+                var employeeMaster = new EmployeeMaster
+                {
+                    EmployeeCode = "E0002",
                     EmployeeName = "Test Employee",
-                    EmployeeSupervisorCode = "E0001",
-                    EmployeeLeavePacakge = LeavePacakge.Office
+                    EmployeeLeavePacakge = LeavePacakge.Office,
+                    EmployeeType = EmployeeType.Employee,
+                    EmployeeSupervisorCode = "E0001"
                 };
                 _context.EmployeeMaster.Add(employeeMaster);
                 _context.SaveChanges();
@@ -123,12 +192,11 @@ namespace LeaveManagementSystem.Controllers
                 var newUserRole = new UserRole
                 {
                     UserId = userId,
-                    Role = "Employee"
+                    Role = EmployeeType.Employee.ToString()
                 };
                 _context.UserRole.Add(newUserRole);
                 _context.SaveChanges();
             }
-
             #endregion
             return View();
         }

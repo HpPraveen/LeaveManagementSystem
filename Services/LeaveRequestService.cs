@@ -29,7 +29,8 @@ namespace LeaveManagementSystem.Services
 
         public string GetSupervisorByEmployee(string employeeCode)
         {
-            return _unitOfWork.EmployeeMasterRepository.Get(e => e.EmployeeCode == employeeCode).FirstOrDefault().EmployeeSupervisorCode;
+            var supervisorCode = _unitOfWork.EmployeeMasterRepository.Get(e => e.EmployeeCode == employeeCode).FirstOrDefault().EmployeeSupervisorCode;
+            return _unitOfWork.EmployeeMasterRepository.Get(e => e.EmployeeSupervisorCode == supervisorCode).FirstOrDefault().EmployeeName;
         }
 
         public object GetAllLeaveByEmployee(string employeeCode, int? year)

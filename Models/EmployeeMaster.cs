@@ -31,7 +31,7 @@ namespace LeaveManagementSystem.Models
 
     public enum EmployeeType
     {
-        Normal,
+        Employee,
         Supervisor
     }
 
